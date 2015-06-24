@@ -84,4 +84,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    '/home/manjunath/chit-management/chits/static',
+)
+
 AUTH_USER_MODEL = 'base.ChitUser'
