@@ -37,7 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'chits',
-    'base'
+    'base',
+    'management',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +50,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.template.context_processors.media',
+    )
 
 ROOT_URLCONF = 'chits.urls'
 
@@ -87,5 +93,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     '/home/manjunath/chit-management/chits/static',
 )
+
+MEDIA_ROOT = '/home/manjunath/chit-management/chits/images'
 
 AUTH_USER_MODEL = 'base.ChitUser'
