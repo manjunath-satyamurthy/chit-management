@@ -36,6 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chits',
+    'base',
+    'management',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,6 +50,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.template.context_processors.media',
+    )
 
 ROOT_URLCONF = 'chits.urls'
 
@@ -81,3 +89,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    '/home/manjunath/chit-management/chits/static',
+)
+
+MEDIA_ROOT = '/home/manjunath/chit-management/chits/images'
+
+AUTH_USER_MODEL = 'base.ChitUser'
