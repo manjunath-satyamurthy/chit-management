@@ -16,13 +16,14 @@ class Migration(migrations.Migration):
             name='Member',
             fields=[
                 ('mid', models.IntegerField(serialize=False, primary_key=True)),
-                ('first_name', models.CharField(max_length=25)),
-                ('last_name', models.CharField(max_length=25)),
+                ('username', models.CharField(unique=True, max_length=50)),
+                ('firstname', models.CharField(max_length=25)),
+                ('lastname', models.CharField(max_length=25)),
                 ('address', models.CharField(max_length=25)),
-                ('phone_number', models.CharField(max_length=20)),
+                ('phone_number', models.CharField(unique=True, max_length=20)),
                 ('photo', models.ImageField(upload_to=b'', blank=True)),
                 ('created_on', models.DateTimeField(auto_now_add=True)),
-                ('uid', models.ForeignKey(related_name='members', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='members', to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },

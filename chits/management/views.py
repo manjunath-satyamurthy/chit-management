@@ -23,4 +23,12 @@ def test_image_upload(request):
 
 
 @login_required
-def dashboard(request)
+def dashboard(request):
+    if request.method == 'GET':
+        return render(request, 'dashboard.html')
+
+
+@login_required
+def view_members(request):
+    if request.method == 'GET':
+        return render(request, 'members.html')

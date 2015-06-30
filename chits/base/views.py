@@ -1,22 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login as dj_login, \
     logout as dj_logout
 from django.views.decorators.csrf import csrf_exempt
 
-
-def login(HttpRequest):
-    if HttpRequest.method == "GET":
+@csrf_exempt
+def login(request):
+    if request.method == "GET":
         login_template = loader.get_template('login.html')
-        c = RequestContext(HttpRequest)
+        c = RequestContext(request)
         return HttpResponse(login_template.render(c))
-    if HttpRequest.method == "POST":
-        data = HttpRequest.POST
+    if request.method == "POST":
+        data = request.POST
         username, password = data['username'], data['password']
 
         user = authenticate(username=username, password=password)
         if user:
-            dj_login(HttpRequest, user)
-            return JsonResponse({'message': 'success'})
+            dj_login(request, user)
+            c = RequestContext(request)
+            return redirect('dashboard')
         return JsonResponse({'message': 'Invalid Credentials'}, status=401)
