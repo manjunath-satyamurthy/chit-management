@@ -36,6 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chits',
+    'base',
+    'management',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +84,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    '/home/manjunath/chit-management/chits/static',
+)
+
+MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
+
+AUTH_USER_MODEL = 'base.ChitUser'
