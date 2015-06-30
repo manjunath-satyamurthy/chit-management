@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as dj_login, \
     logout as dj_logout
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
+
 def login(HttpRequest):
     if HttpRequest.method == "GET":
         login_template = loader.get_template('login.html')

@@ -51,11 +51,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.template.context_processors.media',
-    )
-
 ROOT_URLCONF = 'chits.urls'
 
 WSGI_APPLICATION = 'chits.wsgi.application'
@@ -94,6 +89,6 @@ STATICFILES_DIRS = (
     '/home/manjunath/chit-management/chits/static',
 )
 
-MEDIA_ROOT = '/home/manjunath/chit-management/chits/images'
+MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
 
 AUTH_USER_MODEL = 'base.ChitUser'

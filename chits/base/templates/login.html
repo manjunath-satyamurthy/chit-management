@@ -14,6 +14,7 @@
       <div class="login-box-body">
         <p class="login-box-msg">Sign in</p>
         <form action="/login/" method="post">
+          {% csrf_token %}
           <div class="form-group has-feedback">
             <input name="username" class="form-control" placeholder="username" />
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
