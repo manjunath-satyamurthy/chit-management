@@ -85,7 +85,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 try:
     from local_settings import STATICFILES_DIRS
 except ImportError:
@@ -95,7 +94,5 @@ try:
     from local_settings import MEDIA_ROOT
 except ImportError:
     MEDIA_ROOT = None
-
-MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
 
 AUTH_USER_MODEL = 'base.ChitUser'
