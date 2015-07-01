@@ -85,9 +85,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    '/home/manjunath/chit-management/chits/static',
-)
+
+try:
+    from local_settings import STATICFILES_DIRS
+except ImportError:
+    STATICFILES_DIRS = None
+
+try:
+    from local_settings import MEDIA_ROOT
+except ImportError:
+    MEDIA_ROOT = None
 
 MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
 
