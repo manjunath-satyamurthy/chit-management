@@ -95,4 +95,6 @@ try:
 except ImportError:
     MEDIA_ROOT = None
 
+MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
+
 AUTH_USER_MODEL = 'base.ChitUser'
