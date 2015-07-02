@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login as dj_login, \
     logout as dj_logout
 from django.views.decorators.csrf import csrf_exempt
@@ -32,7 +32,17 @@ def dashboard(request):
 @login_required
 def view_members(request):
     if request.method == 'GET':
-        return render(request, 'members.html')
+        members_template = loader.get_template('members.html')
+        c = RequestContext(request,
+                {'members': request.user.members.all()}
+            )
+        return HttpResponse(members_template.render(c))
+
+
+# @login_required
+# def view_member_details(request):
+#     if request.method == 'GET':
+        
 
 
 @csrf_exempt
@@ -48,8 +58,7 @@ def create_new_member(request):
         firstname , lastname = data['firstname'], data['lastname']
         address = data['address']
         phone_number = data['phone_number']
-        photo = request.FILES['photo']
-        print photo
+        photo = request.FILES.get('photo')
 
         new_member = create_member(user=request.user, firstname=firstname,
                 lastname=lastname, address=address, phone_number=phone_number,

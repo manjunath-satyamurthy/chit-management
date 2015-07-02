@@ -66,6 +66,14 @@ DATABASES = {
     }
 }
 
+
+TEMPLATES = [
+    {
+        'context_processors': 'django.template.context_processors.media',
+    }
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -95,6 +103,6 @@ try:
 except ImportError:
     MEDIA_ROOT = None
 
-MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
-
 AUTH_USER_MODEL = 'base.ChitUser'
+
+MEDIA_URL = 'http://127.0.0.1:8000/static/media/member_photos/'

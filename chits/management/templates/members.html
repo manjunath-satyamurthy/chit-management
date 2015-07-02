@@ -66,22 +66,25 @@
               <table id="members_table" class="display">
                   <thead>
                       <tr>
-                          <th>Username</th>
+                          <th>id</th>
+                          <th>pic</th>
+                          <th>firstname</th>
+                          <th>lastname</th>
                           <th>address</th>
                           <th>phone number</th>
                       </tr>
                   </thead>
                   <tbody>
+                    {% for member in members %}
                       <tr>
-                          <td>bullbull</td>
-                          <td>bang</td>
-                          <td>999</td>
+                          <td>{{ member.mid }}</td>
+                          <td><img src="{{ member.photo.url }}" height="30" width="32"></td>
+                          <td>{{ member.firstname }}</td>
+                          <td>{{ member.lastname }}</td>
+                          <td>{{ member.address }}</td>
+                          <td>{{ member.phone_number }}</td>
                       </tr>
-                      <tr>
-                          <td>bulkbulk</td>
-                          <td>chen</td>
-                          <td>666</td>
-                      </tr>
+                    {% endfor %}
                   </tbody>
               </table>
             </div><!-- /.col -->
@@ -101,6 +104,9 @@
       $(document).ready( function () {
           $('#members_table').DataTable({
               "bLengthChange" : false,
+              "columnDefs": [
+               { "width": "2%", "targets": [0] }
+              ],
             });
       } );
     </script>

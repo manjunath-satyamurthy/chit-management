@@ -54,3 +54,9 @@ docs/_build/
 *.sqlite3
 
 local_settings.py
+
+#pictures
+
+*.jpg
+*.png
+*.jpeg
