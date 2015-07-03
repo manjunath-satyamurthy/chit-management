@@ -66,6 +66,14 @@ DATABASES = {
     }
 }
 
+
+TEMPLATES = [
+    {
+        'context_processors': 'django.template.context_processors.media',
+    }
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -85,10 +93,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    '/home/manjunath/chit-management/chits/static',
-)
+try:
+    from local_settings import STATICFILES_DIRS
+except ImportError:
+    STATICFILES_DIRS = None
 
-MEDIA_ROOT = '/home/manjunath/chit-management/chits/static/media'
+try:
+    from local_settings import MEDIA_ROOT
+except ImportError:
+    MEDIA_ROOT = None
 
 AUTH_USER_MODEL = 'base.ChitUser'
+
+MEDIA_URL = 'http://127.0.0.1:8000/static/media/member_photos/'
