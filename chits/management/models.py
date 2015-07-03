@@ -55,6 +55,16 @@ class ChitBatch(Model):
     created_on = DateTimeField(auto_now_add=True)
 
 
+class PaymentRecord(Model):
+    """
+    To keep track of all the member's payments
+    """
+    chitbatch = ForeignKey(ChitBatch, related_name='payments')
+    member = ForeignKey(Member, related_name='payments')
+    paid = IntegerField(blank=True, null=True)
+    bid_date = DateTimeField(blank=False)
+
+
 class BidRecord(Model):
     """
     Monthly details of all Chit batch's bid's
@@ -66,14 +76,5 @@ class BidRecord(Model):
     balance = IntegerField(blank=False)
     payment_record = ManyToManyField(PaymentRecord)
 
-
-class PaymentRecord(Model):
-    """
-    To keep track of all the member's payments
-    """
-    chitbatch = ForeignKey(ChitBatch, related_name='payments')
-    member = ForeignKey(Member, related_name='payments')
-    paid = IntegerField(blank=True, null=True)
-    bid_date = DateTimeField(blank=False)
 
 
