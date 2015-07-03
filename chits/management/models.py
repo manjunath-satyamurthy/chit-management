@@ -51,5 +51,16 @@ class ChitBatch(Model):
     start_date = DateTimeField(blank=False)
     start_time = TimeField(blank=False)
     state = BooleanField(default=True)
-    end_date = TimeField(blank=True)
+    end_date = TimeField(blank=True, null=True)
     created_on = DateTimeField(auto_now_add=True)
+
+
+class BidRecord(Model):
+    """
+    Monthly details of all Chit batch's bid's
+    """
+    chitbatch = ForeignKey(ChitBatch, related_name='records')
+    bidder = ForeignKey(Member, related_name='bidders')
+    bid_date = DateTimeField(blank=False)
+    bid_amount = IntegerField(blank=False)
+    balance = IntegerField(blank=False)
