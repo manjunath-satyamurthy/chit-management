@@ -64,3 +64,16 @@ class BidRecord(Model):
     bid_date = DateTimeField(blank=False)
     bid_amount = IntegerField(blank=False)
     balance = IntegerField(blank=False)
+    payment_record = ManyToManyField(PaymentRecord)
+
+
+class PaymentRecord(Model):
+    """
+    To keep track of all the member's payments
+    """
+    chitbatch = ForeignKey(ChitBatch, related_name='payments')
+    member = ForeignKey(Member, related_name='payments')
+    paid = IntegerField(blank=True, null=True)
+    bid_date = DateTimeField(blank=False)
+
+
