@@ -1,37 +1,57 @@
 {% extends "base.html" %}
 
+{% block title %}
+Create Member
+{% endblock %}
+
 {% block heading %}
   Create Member
 {% endblock %}
 
 {% block content %}
-<div class="col-md-6">
-    <div class="box box-primary">
-      <form role="form" method="post" action="/members/create/" enctype="multipart/form-data" data-ajax="false">
-        <div class="box-body">
+<div class="box box-default">
+  <div class="box-body">
+    <form role="form" method="post" action="/members/create/" enctype="multipart/form-data" data-ajax="false">
+      <div class="row">
+        <div class="col-md-6">
           <div class="form-group">
             <label>Firstname</label>
             <input class="form-control" name="firstname" placeholder="firstname">
           </div>
+        </div>
+        <div class="col-md-6">
           <div class="form-group">
             <label>Lastname</label>
             <input class="form-control" name="lastname" placeholder="lastname">
           </div>
+        </div>
+        <div class="col-md-6">
           <div class="form-group">
             <label>Address</label>
             <input class="form-control" name="address" placeholder="address">
           </div>
+        </div>
+        <div class="col-md-6">
           <div class="form-group">
             <label>Phone Number</label>
             <input class="form-control" name="phone_number" placeholder="phone_number">
           </div>
+        </div>
+        <div class="col-md-6">
           <div class="form-group">
             <label>Photo</label>
             <input name="photo" type="file" value="photo">
           </div>
-            <button type="submit" class="btn btn-primary">create</button>
-        </div><!-- /.box-body -->
-      </form>
-    </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group" style="text-align:center">
+          <button type="submit" class="btn btn-primary">create</button>
+        </div>
+      </div>
+
+    </form>
   </div>
+</div>
 {% endblock %}
