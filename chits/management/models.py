@@ -1,6 +1,6 @@
 from django.db.models import CharField, IntegerField, Model, \
     DateTimeField, ImageField, ForeignKey, TimeField, SmallIntegerField, \
-    BooleanField, ManyToManyField
+    BooleanField, ManyToManyField, DateField
 
 from base.models import ChitUser
 
@@ -26,16 +26,6 @@ class Member(Model):
         self.save()
         return self
 
-def create_member(user, firstname, lastname, address, phone_number,
-    photo=None):
-
-    username = firstname+'_'+lastname
-    member = Member(user=user, firstname=firstname, lastname=lastname,
-            username=username, address=address,phone_number=phone_number,
-            photo=photo)
-    member.save()
-    return member
-
 
 class ChitBatch(Model):
     """
@@ -48,7 +38,7 @@ class ChitBatch(Model):
     emi = IntegerField(blank=False)
     period = SmallIntegerField(blank=False)
     dues = SmallIntegerField(blank=False)
-    start_date = DateTimeField(blank=False)
+    start_date = DateField(blank=False)
     start_time = TimeField(blank=False)
     state = BooleanField(default=True)
     end_date = TimeField(blank=True, null=True)
