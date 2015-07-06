@@ -1,43 +1,50 @@
 {% extends "base.html" %}
 
+{% block title %}
+View Chit Batches
+{% endblock %}
+
 {% block link %}
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
 {% endblock %}
 
 {% block heading %}
-  Members
-  <a href="/members/create" class="fa fa-fw fa-user-plus"></a>
+  View Chit Batches
+  <a href="/chits/view/" class="fa fa-fw fa-plus"></a>
 {% endblock %}
 
+
 {% block content %}
+
   <div class="row">
     <div class="col-xs-12">
-      <table id="members_table" class="display">
+      <table id="chits_table" class="display">
           <thead>
             <tr>
                 <th>id</th>
-                <th>pic</th>
-                <th>firstname</th>
-                <th>lastname</th>
-                <th>address</th>
-                <th>phone number</th>
+                <th>name</th>
+                <th>principal</th>
+                <th>start date</th>
+                <th>dues</th>
+                <th>state</th>
             </tr>
           </thead>
           <tbody>
-            {% for member in members %}
+            {% for chit in chits %}
               <tr>
-                  <td>{{ member.mid }}</td>
-                  <td><img src="{{ member.photo.url }}" height="30" width="32"></td>
-                  <td>{{ member.firstname }}</td>
-                  <td>{{ member.lastname }}</td>
-                  <td>{{ member.address }}</td>
-                  <td>{{ member.phone_number }}</td>
+                  <td>{{ chit.id }}</td>
+                  <td>{{ chit.name }}</td>
+                  <td>{{ chit.principal }}</td>
+                  <td>{{ chit.start_date }}</td>
+                  <td>{{ chit.dues }}</td>
+                  <td>{{ chit.state }}</td>
               </tr>
             {% endfor %}
           </tbody>
       </table>
     </div>
   </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -45,7 +52,7 @@
 
 <script>
   $(document).ready( function () {
-    $('#members_table').DataTable({
+    $('#chits_table').DataTable({
       "bLengthChange" : false,
       "columnDefs": [
        { "width": "2%", "targets": [0] }

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Create Chit Batches
+{% endblock %}
+
+{% block link %}
+<link href="{{ STATIC_URL }}css/jquery.datetimepicker.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block heading %}
+Create Chit Batches
+{% endblock %}
+
+{% block content %}
+
+<div class="box box-default">
+  <div class="box-body">
+    <form role="form" method="post" action="/members/create/" enctype="multipart/form-data" data-ajax="false">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>chit name</label>
+            <input class="form-control" name="name" placeholder="name">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>principal</label>
+            <input class="form-control" name="principal" placeholder="principal">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>period</label>
+            <input class="form-control" name="address" placeholder="address">
+          </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+              <label>Start date and time</label>  
+              <div class='input-group date'>
+                  <input id='datetimepicker1' type='text' class="form-control" />
+                  <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Add members to the chit group</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-10">
+          
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="form-group" style="text-align:center">
+          <button type="submit" class="btn btn-primary">create</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ STATIC_URL }}js/jquery.datetimepicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready( function () {
+  $('#datetimepicker1').datetimepicker({
+    step: 30,
+    formatDate:'d.m.Y',
+  });
+});
+</script>
+{% endblock %}

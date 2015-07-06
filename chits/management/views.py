@@ -7,7 +7,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from base.models import ChitUser
-from management.models import Member, create_member
+from management.models import Member
+
+from management.dbapi import get_members_by_user, create_member, \
+    get_chits_by_user
 
 
 @csrf_exempt
@@ -32,9 +35,9 @@ def dashboard(request):
 @login_required
 def view_members(request):
     if request.method == 'GET':
-        members_template = loader.get_template('members.html')
+        members_template = loader.get_template('view_members.html')
         c = RequestContext(request,
-                {'members': request.user.members.all()}
+                {'members': get_members_by_user(request.user)}
             )
         return HttpResponse(members_template.render(c))
 
@@ -43,7 +46,6 @@ def view_members(request):
 # def view_member_details(request):
 #     if request.method == 'GET':
         
-
 
 @csrf_exempt
 @login_required
@@ -65,3 +67,27 @@ def create_new_member(request):
                 photo=photo)
 
         return redirect('view_members')
+
+
+@login_required
+def view_chits(request):
+    """
+    To view information of all chit batches
+    """
+    if request.method == "GET":
+        view_chits_template = loader.get_template('view_chits.html')
+        c = RequestContext(request,
+                {'chits': get_chits_by_user(request.user)}
+            )
+        return HttpResponse(view_chits_template.render(c))
+
+
+@login_required
+def create_chit(request):
+    """
+    To create a new chit batch
+    """
+    if request.method == 'GET':
+        return render(request, 'create_chit.html')
+
+
