@@ -13,75 +13,75 @@
     {% endblock %}
   </head>
 
-    <body class="skin-blue fixed sidebar-mini">
-      <div class="wrapper">
-        <header class="main-header">
-          <a href="/dashboard" class="logo">
-            <span class="logo-mini"><b>S C</b></span>
-            <span class="logo-lg"><b>Sarala Chits</b></span>
-          </a>
+  <body class="skin-blue fixed sidebar-mini">
+    <div class="wrapper">
+      <header class="main-header">
+        <a href="/dashboard" class="logo">
+          <span class="logo-mini"><b>S C</b></span>
+          <span class="logo-lg"><b>Sarala Chits</b></span>
+        </a>
 
-          <nav class="navbar navbar-static-top" role="navigation">
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">          </a>
-            <div class="navbar-custom-menu">
-            </div>
-          </nav>
-        </header>
+        <nav class="navbar navbar-static-top" role="navigation">
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">          </a>
+          <div class="navbar-custom-menu">
+          </div>
+        </nav>
+      </header>
 
-        <aside class="main-sidebar">
-          <section class="sidebar">
-            <ul class="sidebar-menu">
-              <li class="header">MAIN NAVIGATION</li>
-              <li class="treeview">
-                <a href="/dashboard">
-                  <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="/members">
-                  <i class="fa fa-files-o"></i>
-                  <span>Members</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li><a href="/members/view/">View Members</a></li>
-                  <li><a href="/members/create/">Create Member</a></li>
-                </ul>
-              </li>
-              <li class="treeview">
-                <a href="">
-                  <i class="fa fa-files-o"></i>
-                  <span>Chit Batches</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li><a href="/chits/view/">View Chits</a></li>
-                  <li><a href="/chits/create/">Create Chits</a></li>
-                </ul>
-              </li>
-            </ul>
-          </section>
-        </aside>
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="treeview">
+              <a href="/dashboard">
+                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="treeview">
+              <a href="/members">
+                <i class="fa fa-files-o"></i>
+                <span>Members</span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/members/view/">View Members</a></li>
+                <li><a href="/members/create/">Create Member</a></li>
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="">
+                <i class="fa fa-files-o"></i>
+                <span>Chit Batches</span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/chits/view/">View Chits</a></li>
+                <li><a href="/chits/create/">Create Chits</a></li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+      </aside>
 
-        <div class="content-wrapper">
-          <section class="content-header">
-            <h1>
-            {% block heading %}
-            {% endblock %}
-            </h1>
-          </section>
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+          {% block heading %}
+          {% endblock %}
+          </h1>
+        </section>
 
-          <section class="content">
-            {% block content %}
-            {% endblock %}
-          </section>
-
-        </div>
+        <section class="content">
+          {% block content %}
+          {% endblock %}
+        </section>
 
       </div>
 
-      <script src="{{ STATIC_URL }}js/jQuery-2.1.4.min.js" type="text/javascript"></script>
-      <script src="{{ STATIC_URL }}js/bootstrap.min.js" type="text/javascript"></script>
-      <script src="{{ STATIC_URL }}js/app.min.js" type="text/javascript"></script>
-      {% block scripts %}
-      {% endblock %}
-    </body>
-  </html>
+    </div>
+
+    <script src="{{ STATIC_URL }}js/jQuery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/app.min.js" type="text/javascript"></script>
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>

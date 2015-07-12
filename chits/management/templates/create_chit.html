@@ -6,6 +6,8 @@ Create Chit Batches
 
 {% block link %}
 <link href="{{ STATIC_URL }}css/jquery.datetimepicker.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+
 {% endblock %}
 
 {% block heading %}
@@ -33,40 +35,43 @@ Create Chit Batches
         <div class="col-md-6">
           <div class="form-group">
             <label>period</label>
-            <input class="form-control" name="address" placeholder="address">
+            <input class="form-control" name="address" placeholder="period">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>no of members</label>
+            <input class="form-control" name="members_count" placeholder="no of members">
           </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
               <label>Start date and time</label>  
               <div class='input-group date'>
-                  <input id='datetimepicker1' type='text' class="form-control" />
+                  <input id='datetimepicker1' type='text' class="form-control" placeholder="yyyy/mm/dd h:m">
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>
               </div>
             </div>
         </div>
-      </div>
 
-      <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Add members to the chit group</label>
+            <label>Add members to the batch</label>
+            <div class='input-group date'>
+              <div class='input-group date'>
+                <button type="button" class="form-control btn btn-default" data-toggle="modal" data-target="#myModal">add members</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-10">
-          
-        </div>
       </div>
-
 
       <div class="row">
         <div class="form-group" style="text-align:center">
-          <button type="submit" class="btn btn-primary">create</button>
+          <button type="submit" class="btn btn-info">create</button>
         </div>
       </div>
 
@@ -74,16 +79,53 @@ Create Chit Batches
   </div>
 </div>
 
+
+<div class="row">
+  <div class="col-md-12">
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="text-align:center">
+            <button id="members_table_button" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Choose Members</h4>
+          </div>
+          <div class="modal-body">
+                <table id="add_members" class="cell-border display">
+                  <thead>
+                      <tr>
+                          <th class="add">add</th>
+                          <th>photo</th>
+                          <th>username</th>
+                          <th>phone number</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  {% for member in members %}
+                      <tr>
+                          <td><input class="members" id="{{ member.mid }}" type="checkbox"></td>
+                          <td><img src="{{ member.photo.url }}" height="30" width="32"></td>
+                          <td>{{ member.username }}</td>
+                          <td>{{ member.phone_number }}</td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+          </div>
+          <div class="modal-footer" style="text-align:center">
+            <button type="button" class="btn btn-default">Add Members</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ STATIC_URL }}js/jquery.datetimepicker.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(document).ready( function () {
-  $('#datetimepicker1').datetimepicker({
-    step: 30,
-    formatDate:'d.m.Y',
-  });
-});
-</script>
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/create_chit.js"></script>
 {% endblock %}

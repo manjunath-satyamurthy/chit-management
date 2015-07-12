@@ -88,6 +88,10 @@ def create_chit(request):
     To create a new chit batch
     """
     if request.method == 'GET':
-        return render(request, 'create_chit.html')
+        create_chit_template = loader.get_template('create_chit.html')
+        c = RequestContext(request,
+                {'members': get_members_by_user(request.user)}
+            )
+        return HttpResponse(create_chit_template.render(c))
 
 
