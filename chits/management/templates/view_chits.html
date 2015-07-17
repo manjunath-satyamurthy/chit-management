@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Chit Batches
+{% endblock %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+{% endblock %}
+
+{% block heading %}
+  View Chit Batches
+  <a href="/chits/view/" class="fa fa-fw fa-plus"></a>
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-xs-12">
+      <table id="chits_table" class="display">
+          <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>principal</th>
+                <th>start date</th>
+                <th>dues</th>
+                <th>state</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for chit in chits %}
+              <tr>
+                  <td>{{ chit.id }}</td>
+                  <td>{{ chit.name }}</td>
+                  <td>{{ chit.principal }}</td>
+                  <td>{{ chit.start_date }}</td>
+                  <td>{{ chit.dues }}</td>
+                  <td>{{ chit.state }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+
+<script>
+  $(document).ready( function () {
+    $('#chits_table').DataTable({
+      "bLengthChange" : false,
+      "columnDefs": [
+       { "width": "2%", "targets": [0] }
+      ],
+    });
+  } );
+</script>
+{% endblock %}

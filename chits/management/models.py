@@ -1,6 +1,6 @@
 from django.db.models import CharField, IntegerField, Model, \
     DateTimeField, ImageField, ForeignKey, TimeField, SmallIntegerField, \
-    BooleanField, ManyToManyField
+    BooleanField, ManyToManyField, DateField
 
 from base.models import ChitUser
 
@@ -26,16 +26,6 @@ class Member(Model):
         self.save()
         return self
 
-def create_member(user, firstname, lastname, address, phone_number,
-    photo=None):
-
-    username = firstname+'_'+lastname
-    member = Member(user=user, firstname=firstname, lastname=lastname,
-            username=username, address=address,phone_number=phone_number,
-            photo=photo)
-    member.save()
-    return member
-
 
 class ChitBatch(Model):
     """
@@ -44,15 +34,26 @@ class ChitBatch(Model):
     user = ForeignKey(ChitUser, related_name='chit_batches')
     name = CharField(max_length=25, unique=True, blank=False)
     members = ManyToManyField(Member)
+    no_of_members = SmallIntegerField(blank=False, default=0)
     principal = IntegerField(blank=False)
     emi = IntegerField(blank=False)
     period = SmallIntegerField(blank=False)
     dues = SmallIntegerField(blank=False)
-    start_date = DateTimeField(blank=False)
+    start_date = DateField(blank=False)
     start_time = TimeField(blank=False)
     state = BooleanField(default=True)
     end_date = TimeField(blank=True, null=True)
     created_on = DateTimeField(auto_now_add=True)
+
+
+class PaymentRecord(Model):
+    """
+    To keep track of all the member's payments
+    """
+    chitbatch = ForeignKey(ChitBatch, related_name='payments')
+    member = ForeignKey(Member, related_name='payments')
+    paid = IntegerField(blank=True, null=True)
+    bid_date = DateTimeField(blank=False)
 
 
 class BidRecord(Model):
@@ -66,14 +67,5 @@ class BidRecord(Model):
     balance = IntegerField(blank=False)
     payment_record = ManyToManyField(PaymentRecord)
 
-
-class PaymentRecord(Model):
-    """
-    To keep track of all the member's payments
-    """
-    chitbatch = ForeignKey(ChitBatch, related_name='payments')
-    member = ForeignKey(Member, related_name='payments')
-    paid = IntegerField(blank=True, null=True)
-    bid_date = DateTimeField(blank=False)
 
 

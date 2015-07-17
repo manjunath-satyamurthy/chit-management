@@ -1,3 +1,5 @@
+import json, datetime
+
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 from django.http import JsonResponse, HttpResponse
@@ -7,7 +9,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from base.models import ChitUser
-from management.models import Member, create_member
+from management.models import Member
+
+from management.dbapi import get_members_by_user, create_member, \
+    get_chits_by_user, create_chit_batch, get_members_by_ids
 
 
 @csrf_exempt
@@ -32,9 +37,9 @@ def dashboard(request):
 @login_required
 def view_members(request):
     if request.method == 'GET':
-        members_template = loader.get_template('members.html')
+        members_template = loader.get_template('view_members.html')
         c = RequestContext(request,
-                {'members': request.user.members.all()}
+                {'members': get_members_by_user(request.user)}
             )
         return HttpResponse(members_template.render(c))
 
@@ -43,7 +48,6 @@ def view_members(request):
 # def view_member_details(request):
 #     if request.method == 'GET':
         
-
 
 @csrf_exempt
 @login_required
@@ -65,3 +69,48 @@ def create_new_member(request):
                 photo=photo)
 
         return redirect('view_members')
+
+
+@login_required
+def view_chits(request):
+    """
+    To view information of all chit batches
+    """
+    if request.method == "GET":
+        view_chits_template = loader.get_template('view_chits.html')
+        c = RequestContext(request,
+                {'chits': get_chits_by_user(request.user)}
+            )
+        return HttpResponse(view_chits_template.render(c))
+
+
+@csrf_exempt
+@login_required
+def create_chit(request):
+    """
+    To create a new chit batch
+    """
+    if request.method == 'GET':
+        create_chit_template = loader.get_template('create_chit.html')
+        c = RequestContext(request,
+                {'members': get_members_by_user(request.user)}
+            )
+        return HttpResponse(create_chit_template.render(c))
+
+    if request.method == 'POST':
+        data = json.loads(request.POST['data'])
+
+        raw_dt = data['datetime']
+        mids = data['chit_members_id']
+        date = datetime.date(raw_dt['yyyy'], raw_dt['mm'], raw_dt['dd'])
+        time = datetime.time(raw_dt['h'], raw_dt['m'], 0) 
+        members = get_members_by_ids(mids)
+        new_chit = create_chit_batch(user=request.user, name=data['name'],
+            principal=data['principal'], period=data['period'],
+            no_of_members=data['no_of_members'], start_date=date,
+            start_time=time, members=members)
+
+        return JsonResponse({
+            'status': 'success'
+            })
+

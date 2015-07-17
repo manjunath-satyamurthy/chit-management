@@ -58,5 +58,8 @@ local_settings.py
 #pictures
 
 *.jpg
+*.JPG
 *.png
+*.PNG
 *.jpeg
+*.JPEG
