@@ -34,6 +34,7 @@ class ChitBatch(Model):
     user = ForeignKey(ChitUser, related_name='chit_batches')
     name = CharField(max_length=25, unique=True, blank=False)
     members = ManyToManyField(Member)
+    no_of_members = SmallIntegerField(blank=False, default=0)
     principal = IntegerField(blank=False)
     emi = IntegerField(blank=False)
     period = SmallIntegerField(blank=False)

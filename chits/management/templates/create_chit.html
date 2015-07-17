@@ -41,14 +41,14 @@ Create Chit Batches
         <div class="col-md-6">
           <div class="form-group">
             <label>period</label>
-            <input class="form-control" name="address" placeholder="period" data-error="Please enter the chit's Period of time" required pattern="^([0-9]+)">
+            <input class="form-control" name="period" placeholder="period" data-error="Please enter the chit's Period of time" required pattern="^([0-9]+)">
             <div class="help-block with-errors"></div>
           </div>
         </div>
         <div class="col-md-6">
           <div id="no_members" class="form-group">
             <label>no of members</label>
-            <input class="form-control" name="members_count" placeholder="no of members" data-error="Please enter the number of members" required pattern="^([0-9]+)">
+            <input id="no_members_input" class="form-control" name="members_count" placeholder="no of members" data-error="Please enter the number of members" required pattern="^([0-9]+)">
             <div class="help-block with-errors"></div>
           </div>
         </div>
@@ -59,7 +59,7 @@ Create Chit Batches
             <div class="form-group">
               <label>Start date and time</label>  
               <div class='input-group'>
-                  <input id='datetimepicker1' type='text' class="form-control" placeholder="yyyy/mm/dd h:m" data-error="Please choose the chit date and time" required>
+                  <input id='datetimepicker1' class="form-control" placeholder="dd.mm.yyyy h:m" data-error="Please choose the chit date and time" name="datetime" required>
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>
@@ -72,7 +72,7 @@ Create Chit Batches
             <label>Add members to the batch</label>
             <div class='input-group date'>
               <div class='input-group date'>
-                <button id="add_members_button" type="button" class="form-control btn btn-default">add members</button>
+                <button id="add_members_modal_button" type="button" class="form-control btn btn-default">add members</button>
               </div>
             </div>
           </div>
@@ -80,8 +80,19 @@ Create Chit Batches
       </div>
 
       <div class="row">
-        <div class="form-group" style="text-align:center">
-          <button id="create_chit_submit" type="submit" class="btn btn-info">create</button>
+        <div class="col-md-12">
+          <label>Selected Members</label>
+        </div>
+        <div class="selected_members col-md-12">
+          None
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group" style="text-align:center">
+            <button id="create_chit_submit" type="button" class="btn btn-default">create</button>
+          </div>
         </div>
       </div>
 
@@ -113,7 +124,7 @@ Create Chit Batches
                   {% for member in members %}
                       <tr>
                           <td><input class="members" id="{{ member.mid }}" type="checkbox"></td>
-                          <td><img src="{{ member.photo.url }}" height="30" width="32"></td>
+                          <td id="img_{{ member.mid }}"><img src="{{ member.photo.url }}" height="30" width="32"></td>
                           <td>{{ member.username }}</td>
                           <td>{{ member.phone_number }}</td>
                       </tr>
@@ -121,8 +132,15 @@ Create Chit Batches
                   </tbody>
                 </table>
           </div>
-          <div class="modal-footer" style="text-align:center">
-            <button type="button" class="btn btn-default">Add Members</button>
+          <div class="modal-footer" style="text-align:right">
+            <div class="row">
+              <div class="col-md-6">
+                <p style="text-align:left"><span>Members to be chosen : </span><span id="members_count"></span></p>
+              </div>
+              <div class="col-md-6">
+                <button id="add_members_button" type="button" class="btn btn-default">Add Members</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

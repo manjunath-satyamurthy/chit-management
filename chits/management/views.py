@@ -1,3 +1,5 @@
+import json, datetime
+
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 from django.http import JsonResponse, HttpResponse
@@ -10,7 +12,7 @@ from base.models import ChitUser
 from management.models import Member
 
 from management.dbapi import get_members_by_user, create_member, \
-    get_chits_by_user
+    get_chits_by_user, create_chit_batch, get_members_by_ids
 
 
 @csrf_exempt
@@ -82,6 +84,7 @@ def view_chits(request):
         return HttpResponse(view_chits_template.render(c))
 
 
+@csrf_exempt
 @login_required
 def create_chit(request):
     """
@@ -94,4 +97,20 @@ def create_chit(request):
             )
         return HttpResponse(create_chit_template.render(c))
 
+    if request.method == 'POST':
+        data = json.loads(request.POST['data'])
+
+        raw_dt = data['datetime']
+        mids = data['chit_members_id']
+        date = datetime.date(raw_dt['yyyy'], raw_dt['mm'], raw_dt['dd'])
+        time = datetime.time(raw_dt['h'], raw_dt['m'], 0) 
+        members = get_members_by_ids(mids)
+        new_chit = create_chit_batch(user=request.user, name=data['name'],
+            principal=data['principal'], period=data['period'],
+            no_of_members=data['no_of_members'], start_date=date,
+            start_time=time, members=members)
+
+        return JsonResponse({
+            'status': 'success'
+            })
 
