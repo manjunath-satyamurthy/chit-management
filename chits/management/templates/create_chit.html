@@ -7,6 +7,7 @@ Create Chit Batches
 {% block link %}
 <link href="{{ STATIC_URL }}css/jquery.datetimepicker.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/css/bootstrapvalidator.min.css">
 
 {% endblock %}
 
@@ -18,60 +19,69 @@ Create Chit Batches
 
 <div class="box box-default">
   <div class="box-body">
-    <form role="form" method="post" action="/members/create/" enctype="multipart/form-data" data-ajax="false">
+    <form id="create_chit_form" role="form" method="post">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>chit name</label>
-            <input class="form-control" name="name" placeholder="name">
+            <input class="form-control" name="name" placeholder="name" data-error="Please give name without spaces" pattern="^([A-Z]|[a-z])+$" required>
+            <div class="help-block with-errors"></div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>principal</label>
-            <input class="form-control" name="principal" placeholder="principal">
+            <input class="form-control" name="principal" placeholder="principal" data-error="Please give a proper principal amount" pattern="^([0-9]+)" required>
+            <div class="help-block with-errors"></div>
           </div>
         </div>
+      </div>
+
+      <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>period</label>
-            <input class="form-control" name="address" placeholder="period">
+            <input class="form-control" name="address" placeholder="period" data-error="Please enter the chit's Period of time" required pattern="^([0-9]+)">
+            <div class="help-block with-errors"></div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="form-group">
+          <div id="no_members" class="form-group">
             <label>no of members</label>
-            <input class="form-control" name="members_count" placeholder="no of members">
+            <input class="form-control" name="members_count" placeholder="no of members" data-error="Please enter the number of members" required pattern="^([0-9]+)">
+            <div class="help-block with-errors"></div>
           </div>
         </div>
+      </div>
+
+      <div class="row">
         <div class="col-md-6">
             <div class="form-group">
               <label>Start date and time</label>  
-              <div class='input-group date'>
-                  <input id='datetimepicker1' type='text' class="form-control" placeholder="yyyy/mm/dd h:m">
+              <div class='input-group'>
+                  <input id='datetimepicker1' type='text' class="form-control" placeholder="yyyy/mm/dd h:m" data-error="Please choose the chit date and time" required>
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>
               </div>
+              <div class="help-block with-errors"></div>
             </div>
         </div>
-
         <div class="col-md-6">
           <div class="form-group">
             <label>Add members to the batch</label>
             <div class='input-group date'>
               <div class='input-group date'>
-                <button type="button" class="form-control btn btn-default" data-toggle="modal" data-target="#myModal">add members</button>
+                <button id="add_members_button" type="button" class="form-control btn btn-default">add members</button>
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="row">
         <div class="form-group" style="text-align:center">
-          <button type="submit" class="btn btn-info">create</button>
+          <button id="create_chit_submit" type="submit" class="btn btn-info">create</button>
         </div>
       </div>
 
@@ -126,6 +136,7 @@ Create Chit Batches
 {% block scripts %}
 <script src="{{ STATIC_URL }}js/jquery.datetimepicker.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/validator.min.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/create_chit.js"></script>
 {% endblock %}
