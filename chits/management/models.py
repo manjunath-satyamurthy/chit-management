@@ -4,6 +4,22 @@ from django.db.models import CharField, IntegerField, Model, \
 
 from base.models import ChitUser
 
+
+class PaymentRecordEnum(object):
+    """
+    Enum for PaymentRecord Model
+    """
+    UNKNOWN = -1
+    PAID = 1
+    UN_PAID = 0
+
+    CHOICES = (
+        (UNKNOWN, 'UNKNOWN'),
+        (PAID, 'PAID'),
+        (UN_PAID, 'UN_PAID'),
+    )
+
+
 class Member(Model):
     """
     Members of Chits
@@ -41,9 +57,21 @@ class ChitBatch(Model):
     dues = SmallIntegerField(blank=False)
     start_date = DateField(blank=False)
     start_time = TimeField(blank=False)
+    next_auction = DateField(blank=False, null=True)
     state = BooleanField(default=True)
     end_date = TimeField(blank=True, null=True)
     created_on = DateTimeField(auto_now_add=True)
+
+    def update_payment_record(self):
+        if self.next_auction:
+            prs = []
+            for member in self.members.all():
+                prs.append(PaymentRecord(
+                    chitbatch=self, member=member,
+                    paid=PaymentRecordEnum.UN_PAID,
+                    bid_date=self.next_auction
+                ))
+            PaymentRecord.objects.bulk_create(prs)
 
 
 class PaymentRecord(Model):
@@ -52,7 +80,8 @@ class PaymentRecord(Model):
     """
     chitbatch = ForeignKey(ChitBatch, related_name='payments')
     member = ForeignKey(Member, related_name='payments')
-    paid = IntegerField(blank=True, null=True)
+    paid = IntegerField(blank=True, null=True,
+        default=PaymentRecordEnum.PAID, choices=PaymentRecordEnum.CHOICES)
     bid_date = DateTimeField(blank=False)
 
 
@@ -66,6 +95,3 @@ class BidRecord(Model):
     bid_amount = IntegerField(blank=False)
     balance = IntegerField(blank=False)
     payment_record = ManyToManyField(PaymentRecord)
-
-
-

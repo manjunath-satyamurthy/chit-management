@@ -59,8 +59,9 @@ post_to_create_chit = function () {
     complete: function(result, status) {
       response = JSON.parse(result.responseText)
       if (response['status'] != "success"){
-        alert(result.responseText['message']);
+        alert(response['message']);
       }
+      alert(response['status']);
       window.location.reload();
     }
   });

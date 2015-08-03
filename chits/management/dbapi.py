@@ -10,6 +10,23 @@ def get_members_by_user(user):
     return user.members.all()
 
 
+def get_live_chit_batches(user):
+    """
+    To return all the chit batches created by a 
+    particular user
+    """
+    return user.chit_batches.filter(state=True).all()
+
+
+# def get_members_payment_record(chit_id):
+#     """
+#     To return a list of members who have paid the 
+#     chit dues
+#     """
+
+
+
+
 def get_chits_by_user(user):
     """
     To return all chit batches created by a particular 
@@ -23,6 +40,13 @@ def get_members_by_ids(mids):
     get members by a list of ids
     """
     return Member.objects.filter(mid__in=mids).all()
+
+
+def is_chit_name_existing(name):
+    chit = ChitBatch.objects.filter(name=name).count()
+    if not chit:
+        return False
+    return True
 
 
 def create_member(user, firstname, lastname, address, phone_number,
@@ -41,10 +65,12 @@ def create_chit_batch(user, name, principal, period, no_of_members,
     emi = principal/period
     chitbatch = ChitBatch(user=user, name=name, principal=principal, period=period,
         no_of_members=no_of_members, start_date=start_date, emi=emi, dues=period,
-        start_time=start_time)
+        start_time=start_time, next_auction=start_date)
     chitbatch.save()
 
     for member in members:
         chitbatch.members.add(member)
+        
+    chitbatch.update_payment_record()
 
     return chitbatch

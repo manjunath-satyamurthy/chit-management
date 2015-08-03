@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from management.views import test_image_upload, dashboard, view_members, \
-    create_new_member, view_chits, create_chit
+    create_new_member, view_chits, create_chit, view_payments
 
 urlpatterns = patterns(
     "",
@@ -10,4 +10,5 @@ urlpatterns = patterns(
     url(r'^members/create/$', create_new_member, name='create_new_member'),
     url(r'^chits/view/$', view_chits, name='view_chits'),
     url(r'^chits/create/$', create_chit, name='create_chit'),
+    url(r'^record/payments/$', view_payments, name='view_payments'),
     )

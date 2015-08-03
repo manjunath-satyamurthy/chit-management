@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Payment Records
+{% endblock %}
+
+{% block custom_link %}
+<link href="{{ STATIC_URL }}css/select2.min.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block heading %}
+Payment Records
+{% endblock %}
+
+{% block content %}
+    {% if get_chit %}
+          <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Select Chit Batch</h3>
+            </div>
+
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Chit Batches</label>
+                    <select class="select2 form-control">
+                      <option selected="selected">None</option>
+                      {% for chit in chits %}
+                      <option value="{{ chit.id }}">{{ chit.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    {% else %}
+
+      <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">Select Chit Batch</h3>
+        </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-xs-12">
+          <table id="chits_table" class="display">
+              <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>principal</th>
+                    <th>start date</th>
+                    <th>dues</th>
+                    <th>state</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for chit in chits %}
+                  <tr>
+                      <td>{{ chit.id }}</td>
+                      <td>{{ chit.name }}</td>
+                      <td>{{ chit.principal }}</td>
+                      <td>{{ chit.start_date }}</td>
+                      <td>{{ chit.dues }}</td>
+                      <td>{{ chit.state }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+
+    {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ STATIC_URL }}js/select2.full.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/payment_record.js" type="text/javascript"></script>
+
+{% endblock %}

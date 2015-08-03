@@ -12,7 +12,8 @@ from base.models import ChitUser
 from management.models import Member
 
 from management.dbapi import get_members_by_user, create_member, \
-    get_chits_by_user, create_chit_batch, get_members_by_ids
+    get_chits_by_user, create_chit_batch, get_members_by_ids, \
+    is_chit_name_existing, get_live_chit_batches
 
 
 @csrf_exempt
@@ -99,11 +100,17 @@ def create_chit(request):
 
     if request.method == 'POST':
         data = json.loads(request.POST['data'])
-
         raw_dt = data['datetime']
         mids = data['chit_members_id']
         date = datetime.date(raw_dt['yyyy'], raw_dt['mm'], raw_dt['dd'])
-        time = datetime.time(raw_dt['h'], raw_dt['m'], 0) 
+        time = datetime.time(raw_dt['h'], raw_dt['m'], 0)
+
+        if is_chit_name_existing(data['name']):
+            return JsonResponse({
+                'status': 'failed',
+                'message': 'Chit name already exists'
+                })
+
         members = get_members_by_ids(mids)
         new_chit = create_chit_batch(user=request.user, name=data['name'],
             principal=data['principal'], period=data['period'],
@@ -114,3 +121,22 @@ def create_chit(request):
             'status': 'success'
             })
 
+@login_required
+def view_payments(request):
+    if request.method == 'GET':
+
+        id = request.GET.get('id')
+        payment_record_template = loader.get_template(
+            'payment_record.html'
+        )
+        if not id: 
+            c = RequestContext(request,{
+                    'chits': get_live_chit_batches(request.user),
+                    'get_chit': True
+                })
+        else:
+            c = RequestContext(request,{
+                    'chits': get_live_chit_batches(request.user),
+                })
+
+        return HttpResponse(payment_record_template.render(c))
