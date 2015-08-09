@@ -13,7 +13,8 @@ from management.models import Member
 
 from management.dbapi import get_members_by_user, create_member, \
     get_chits_by_user, create_chit_batch, get_members_by_ids, \
-    is_chit_name_existing, get_live_chit_batches
+    is_chit_name_existing, get_live_chit_batches, \
+    get_payment_records_by_chitbatch_id, get_chitbatch_by_id
 
 
 @csrf_exempt
@@ -43,11 +44,6 @@ def view_members(request):
                 {'members': get_members_by_user(request.user)}
             )
         return HttpResponse(members_template.render(c))
-
-
-# @login_required
-# def view_member_details(request):
-#     if request.method == 'GET':
         
 
 @csrf_exempt
@@ -125,18 +121,21 @@ def create_chit(request):
 def view_payments(request):
     if request.method == 'GET':
 
-        id = request.GET.get('id')
+        chitbatch_id = request.GET.get('id')
         payment_record_template = loader.get_template(
             'payment_record.html'
         )
-        if not id: 
+        if not chitbatch_id: 
             c = RequestContext(request,{
                     'chits': get_live_chit_batches(request.user),
                     'get_chit': True
                 })
         else:
             c = RequestContext(request,{
-                    'chits': get_live_chit_batches(request.user),
+                    'chitbatch': get_chitbatch_by_id(chitbatch_id),
+                    'payment_records': get_payment_records_by_chitbatch_id(
+                        chitbatch_id
+                    ),
                 })
 
         return HttpResponse(payment_record_template.render(c))

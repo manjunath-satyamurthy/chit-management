@@ -91,7 +91,7 @@ class BidRecord(Model):
     """
     chitbatch = ForeignKey(ChitBatch, related_name='records')
     bidder = ForeignKey(Member, related_name='bidders')
-    bid_date = DateTimeField(blank=False)
+    bid_date = DateField(blank=False)
     bid_amount = IntegerField(blank=False)
     balance = IntegerField(blank=False)
     payment_record = ManyToManyField(PaymentRecord)

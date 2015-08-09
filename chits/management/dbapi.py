@@ -18,13 +18,11 @@ def get_live_chit_batches(user):
     return user.chit_batches.filter(state=True).all()
 
 
-# def get_members_payment_record(chit_id):
-#     """
-#     To return a list of members who have paid the 
-#     chit dues
-#     """
-
-
+def get_payment_records_by_chitbatch_id(id):
+    """
+    To return payment records of a particular chit batch
+    """
+    return PaymentRecord.objects.filter(chitbatch_id=id).all()
 
 
 def get_chits_by_user(user):
@@ -40,6 +38,13 @@ def get_members_by_ids(mids):
     get members by a list of ids
     """
     return Member.objects.filter(mid__in=mids).all()
+
+
+def get_chitbatch_by_id(id):
+    """
+    To return ChitBatch by id
+    """
+    return ChitBatch.objects.get(pk=id)
 
 
 def is_chit_name_existing(name):
