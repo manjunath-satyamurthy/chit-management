@@ -82,7 +82,7 @@ class PaymentRecord(Model):
     member = ForeignKey(Member, related_name='payments')
     paid = IntegerField(blank=True, null=True,
         default=PaymentRecordEnum.PAID, choices=PaymentRecordEnum.CHOICES)
-    bid_date = DateTimeField(blank=False)
+    bid_date = DateField(blank=False)
 
 
 class BidRecord(Model):
