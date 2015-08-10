@@ -14,7 +14,8 @@ from management.models import Member
 from management.dbapi import get_members_by_user, create_member, \
     get_chits_by_user, create_chit_batch, get_members_by_ids, \
     is_chit_name_existing, get_live_chit_batches, \
-    get_payment_records_by_chitbatch_id, get_chitbatch_by_id
+    get_payment_records_by_chitbatch_id, get_chitbatch_by_id, \
+    get_chitbatch_distinct_bit_dates
 
 
 @csrf_exempt
@@ -125,9 +126,12 @@ def view_payments(request):
         payment_record_template = loader.get_template(
             'payment_record.html'
         )
-        if not chitbatch_id: 
+        if not chitbatch_id:
+            bid_dates = {}
+            chits = get_live_chit_batches(request.user)
             c = RequestContext(request,{
-                    'chits': get_live_chit_batches(request.user),
+                    'chits': chits,
+                    'bid_dates': get_chitbatch_distinct_bit_dates(chits),
                     'get_chit': True
                 })
         else:

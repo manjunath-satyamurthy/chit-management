@@ -25,6 +25,22 @@ def get_payment_records_by_chitbatch_id(id):
     return PaymentRecord.objects.filter(chitbatch_id=id).all()
 
 
+def get_chitbatch_distinct_bit_dates(chits):
+    """
+    To return a dict of chit to its bid_dates
+    """
+    chit_bid_dates = {}
+    for chit in chits:
+        distinct_bids = chit.payments.all().values('bid_date').distinct()
+        bid_dates = [bd['bid_date'] for bd in distinct_bids]
+        print bid_dates
+        chit_bid_dates[chit.id] = bid_dates
+    print chit_bid_dates
+
+
+    return chit_bid_dates
+
+
 def get_chits_by_user(user):
     """
     To return all chit batches created by a particular 

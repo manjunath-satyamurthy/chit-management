@@ -35,15 +35,12 @@ Payment Records
 {% block content %}
     {% if get_chit %}
           <div class="box box-default">
-            <div class="box-header with-border">
-                <h3 class="box-title">Select Chit Batch</h3>
-            </div>
 
             <div class="box-body">
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label>Chit Batches</label>
+                    <label>Select Chit Batch</label>
                     <select id="select_chitbatch" class="select2 form-control">
                       <option selected="selected">None</option>
                       {% for chit in chits %}
@@ -54,6 +51,17 @@ Payment Records
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="dynamic_select" style="display:none;">
+          {% for chit_id, bid_date in bid_dates.items %}
+            <select id="{{ chit_id }}" class="bid_date select2 form-control">
+              <option selected="selected">None</option>
+              {% for bd in bid_date %}
+                <option value="{{ bd }}">{{ bd }}</option>
+              {% endfor %}
+            </select>
+          {% endfor %}
           </div>
     {% else %}
           <div class="row">
