@@ -139,5 +139,3 @@ def view_payments(request):
                 })
 
         return HttpResponse(payment_record_template.render(c))
-
-#test
