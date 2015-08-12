@@ -106,3 +106,5 @@ except ImportError:
 AUTH_USER_MODEL = 'base.ChitUser'
 
 MEDIA_URL = 'http://127.0.0.1:8000/static/media/member_photos/'
+
+#test
