@@ -26,7 +26,10 @@ Payment Records
       <h5>Start Date : {{ chitbatch.start_date }}</h5>
     </div>
     <div class="col-md-2">
-      <h5>Auction Date: {{ aution_date }}</h5>
+      <h5>Auction Date: {{ auction_date }}</h5>
+    </div>
+    <div class="col-md-2">
+      <h5>Amount: {{ payment_records.0.chitbatch.emi }} &#x20b9;</h5>
     </div>
   </div>
 {% endif %}
@@ -38,6 +41,7 @@ Payment Records
 
             <div class="box-body">
               <div class="row">
+
                 <div class="col-md-4">
                   <div class="form-group">
                     <label>Select Chit Batch</label>
@@ -49,16 +53,24 @@ Payment Records
                     </select>
                   </div>
                 </div>
+
+                <div class="col-md-4 bid_date" style="display:none;">
+                  <div class="form-group">
+                    <label>Select Bid Date</label>
+                    <select id="select_bid_date" class="select2 form-control">
+                    <select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="dynamic_select" style="display:none;">
+          <div class="dynamic_select bid_date_select" style="display:none;">
           {% for chit_id, bid_date in bid_dates.items %}
-            <select id="{{ chit_id }}" class="bid_date select2 form-control">
+            <select id="{{ chit_id }}" class="select2 form-control">
               <option selected="selected">None</option>
               {% for bd in bid_date %}
-                <option value="{{ bd }}">{{ bd }}</option>
+                <option value="{{ bd }}">{{ bd}}</option>
               {% endfor %}
             </select>
           {% endfor %}
@@ -72,6 +84,7 @@ Payment Records
                     <th>id</th>
                     <th>member username</th>
                     <th>has paid</th>
+                    <th>check paid</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -80,10 +93,22 @@ Payment Records
                       <td>{{ payment_record.id }}</td>
                       <td>{{ payment_record.member.username }}</td>
                       <td>{{ payment_record.paid }}</td>
+                      <td>
+                        {% if not payment_record.paid %}
+                          <input type="checkbox" class="payment_checkbox" value="{{ payment_record.id }}">
+                        {% else %}
+                          &#10003;
+                        {% endif %}
+                      </td>
                     </tr>
                   {% endfor %}
                 </tbody>
               </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" style="text-align: center;">
+              <button id="check_paid_btn" class="btn btn-default" type="button" style="display:none;">&#10003; check paid</button>
             </div>
           </div>
     {% endif %}

@@ -14,21 +14,12 @@ from management.models import Member
 from management.dbapi import get_members_by_user, create_member, \
     get_chits_by_user, create_chit_batch, get_members_by_ids, \
     is_chit_name_existing, get_live_chit_batches, \
-    get_payment_records_by_chitbatch_id, get_chitbatch_by_id, \
-    get_chitbatch_distinct_bit_dates
+    get_payment_records_by_chitbatch_id_date, get_chitbatch_by_id, \
+    get_chitbatch_distinct_bit_dates, update_payment, \
+    get_this_month_all_auctions
 
-
-@csrf_exempt
-def test_image_upload(request):
-    if request.method == 'POST':
-        user = ChitUser.objects.all()
-        _file = request.FILES['file']
-        print _file
-        m = Member(user=user[0], first_name='fell', last_name='bkjh',
-                username='bubul',address='INia', phone_number='8121356', 
-                photo=_file)
-        m.save()
-        return JsonResponse({'message': 'success'})
+from management.view_utils \
+    import group_auctions_by_current_complete_remaining
 
 
 @login_required
@@ -118,11 +109,14 @@ def create_chit(request):
             'status': 'success'
             })
 
+
+@csrf_exempt
 @login_required
 def view_payments(request):
     if request.method == 'GET':
 
         chitbatch_id = request.GET.get('id')
+        bid_date = request.GET.get('bid_date')
         payment_record_template = loader.get_template(
             'payment_record.html'
         )
@@ -135,11 +129,43 @@ def view_payments(request):
                     'get_chit': True
                 })
         else:
+            bd = datetime.date(*map(int, bid_date.split('-')))
             c = RequestContext(request,{
                     'chitbatch': get_chitbatch_by_id(chitbatch_id),
-                    'payment_records': get_payment_records_by_chitbatch_id(
-                        chitbatch_id
+                    'payment_records': get_payment_records_by_chitbatch_id_date(
+                        chitbatch_id, bd
                     ),
+                    'auction_date': str(bd),
                 })
+            print bd
 
         return HttpResponse(payment_record_template.render(c))
+
+    if request.method == 'POST':
+        data = json.loads(request.POST['data'])
+        update_payment(data)
+        return JsonResponse({
+            'status': 'success'
+            })
+
+
+@csrf_exempt
+@login_required
+def auction(request):
+    if request.method == 'GET':
+        auction_template = loader.get_template('auctions.html')
+        months_auctions = get_this_month_all_auctions()
+
+        auctions = group_auctions_by_current_complete_remaining(
+            months_auctions)
+        if auctions:
+            c = RequestContext(request,{
+                'auctions': auctions,
+                })
+        
+        else:
+            c = RequestContext(request,{})
+        return HttpResponse(auction_template.render(c))
+
+
+

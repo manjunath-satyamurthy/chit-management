@@ -1,3 +1,4 @@
+import time, datetime
 from management.models import Member, ChitBatch, PaymentRecord, \
     BidRecord
 
@@ -18,11 +19,11 @@ def get_live_chit_batches(user):
     return user.chit_batches.filter(state=True).all()
 
 
-def get_payment_records_by_chitbatch_id(id):
+def get_payment_records_by_chitbatch_id_date(id, bid_date):
     """
     To return payment records of a particular chit batch
     """
-    return PaymentRecord.objects.filter(chitbatch_id=id).all()
+    return PaymentRecord.objects.filter(chitbatch_id=id, bid_date=bid_date).all()
 
 
 def get_chitbatch_distinct_bit_dates(chits):
@@ -32,7 +33,7 @@ def get_chitbatch_distinct_bit_dates(chits):
     chit_bid_dates = {}
     for chit in chits:
         distinct_bids = chit.payments.all().values('bid_date').distinct()
-        bid_dates = [bd['bid_date'] for bd in distinct_bids]
+        bid_dates = [bd['bid_date'].strftime('%Y-%m-%d') for bd in distinct_bids]
         print bid_dates
         chit_bid_dates[chit.id] = bid_dates
     print chit_bid_dates
@@ -95,3 +96,27 @@ def create_chit_batch(user, name, principal, period, no_of_members,
     chitbatch.update_payment_record()
 
     return chitbatch
+
+
+def update_payment(ids):
+    """
+    To update payment info by PaymentRecord list of ids
+    """
+    prs = PaymentRecord.objects.filter(pk__in=ids)
+    for pr in prs:
+        pr.paid = 1
+        pr.save()
+    
+
+def get_this_month_all_auctions():
+    """
+    To return ChitBatch is there exists an auction today
+    """
+    today = map(int, time.strftime("%Y-%m-%d").split('-'))
+    date = datetime.date(today[0], today[1], today[2])
+    first_day_of_month = datetime.date(today[0], today[1], 1)
+    last_day_of_month = datetime.date(today[0], today[1], 31)
+
+    return ChitBatch.objects.filter(
+        next_auction__gte=first_day_of_month,
+        next_auction__lte=last_day_of_month).all()
