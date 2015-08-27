@@ -9,9 +9,7 @@ def group_auctions_by_current_complete_remaining(chit_batches):
 	To group auctions by today's auctions, the rest of the
 	months and the completed auction of the respective month
 	"""
-	today = datetime.now()
-	today_date = today.date()
-	time_now = today.time()
+	today = datetime.now().date()
 
 	auctions = {}
 	auctions['today'] = []
@@ -20,9 +18,9 @@ def group_auctions_by_current_complete_remaining(chit_batches):
 
 	for cb in chit_batches:
 
-		if cb.next_auction == today_date and cb.start_time > time_now:
+		if cb.next_auction == today:
 			auctions['today'].append(cb)
-		elif cb.next_auction > today_date:
+		elif cb.next_auction > today:
 			auctions['remaining'].append(cb)
 		else:
 			auctions['completed'].append(cb)
