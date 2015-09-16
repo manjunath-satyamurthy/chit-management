@@ -52,6 +52,8 @@ class ChitBatch(Model):
     members = ManyToManyField(Member)
     no_of_members = SmallIntegerField(blank=False, default=0)
     principal = IntegerField(blank=False)
+    commission_percent = IntegerField(default=3, blank=False)
+    balance = IntegerField(blank=False, default=0)
     emi = IntegerField(blank=False)
     period = SmallIntegerField(blank=False)
     dues = SmallIntegerField(blank=False)
@@ -72,6 +74,12 @@ class ChitBatch(Model):
                     bid_date=self.next_auction
                 ))
             PaymentRecord.objects.bulk_create(prs)
+
+    def get_commission(self):
+        return (self.principal * self.commission_percent)/100
+
+    def get_auction_amt(self):
+        return (self.principal - self.get_commission()) + self.balance
 
 
 class PaymentRecord(Model):

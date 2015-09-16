@@ -110,13 +110,22 @@ def update_payment(ids):
 
 def get_this_month_all_auctions():
     """
-    To return ChitBatch is there exists an auction today
+    To return ChitBatch if there exists an auction this month
     """
     today = map(int, time.strftime("%Y-%m-%d").split('-'))
-    date = datetime.date(today[0], today[1], today[2])
-    first_day_of_month = datetime.date(today[0], today[1], 1)
-    last_day_of_month = datetime.date(today[0], today[1], 31)
+
+    print ChitBatch.objects.filter(
+        next_auction__month=today[1], next_auction__year=today[0]).all()
 
     return ChitBatch.objects.filter(
-        next_auction__gte=first_day_of_month,
-        next_auction__lte=last_day_of_month).all()
+        next_auction__month=today[1], next_auction__year=today[0]).all()
+
+
+def get_bid_record_by_id_and_bid_date(chit_id, bid_date):
+    """
+    To return BidRecord if exists
+    """
+    return BidRecord.objects.filter(
+        chitbatch=chit_id,
+        bid_date=bid_date
+    )

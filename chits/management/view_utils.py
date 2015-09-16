@@ -4,6 +4,7 @@ from datetime import datetime
 Utils for views.py
 """
 
+
 def group_auctions_by_current_complete_remaining(chit_batches):
 	"""
 	To group auctions by today's auctions, the rest of the

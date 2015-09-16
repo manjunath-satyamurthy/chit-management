@@ -12,6 +12,74 @@ custom_clearInterval = function (id, a){
 	clearInterval(interval_id[id])
 }
 
+formatState = function (state) {
+  if (state.id) { 
+	  var $state = $(
+	    '<span><img src="'+state.id+'" class="img-flag" height="30" width="32"/> ' + state.text + '</span>'
+	  );
+  }
+  else {
+  	var $state = $(state.text);
+  }
+
+  return $state;
+};
+
+show_members_util = function (m_id){
+	id = m_id.split('-')[0]
+	$('#'+id+'-bidder').parents('.bidder-container').show();
+	
+	$('#'+id+'-bidder').select2({templateResult: formatState}).on("change", function(e) {
+		console.log('bullbull')
+	});
+}
+
+show_members_to_select = function (m_id){
+	if ($('#'+m_id).is(':visible')){
+		show_members_util(m_id)
+	}
+	else {
+		$('#'+m_id).on('shown.bs.modal', function (){
+			console.log('hell')
+			show_members_util(m_id)
+	    });
+	}
+}
+
+
+bid_timer = function (rm, rs, modal_id){
+	return setInterval(function(){
+		
+		if (rm ==0 && rs ==0){
+			$('#'+modal_id).find('.bid-input-form').remove();
+			console.log(modal_id)
+			show_members_to_select(modal_id)
+			custom_clearInterval(modal_id)
+		}
+
+		else if (rs == 0){
+			rs = 59;
+			rm = rm -1
+		}
+
+		else if (rs > 0){
+			rs = rs -1
+		}
+
+
+		if (String(rm).length < 2){
+			rm = '0'+String(rm)
+		}
+
+		if (String(rs).length < 2){
+			rs = '0'+String(rs)
+		}
+		$('#'+modal_id).find('#bid-counter').empty().append(rm+':'+rs)
+
+	}, 1000);
+}
+
+
 for (i=0; i<auctions.length; i++){
 	var auction = auctions[i];
 	var int_id = auction.id
@@ -41,7 +109,7 @@ for (i=0; i<auctions.length; i++){
 				remaining_minutes = 59;
 			}
 			else if (remaining_hours <= 0 ){
-				$('#'+auction.id+"_bid_btn").show();
+				$('#'+auction.id+"-bid-btn").show();
 				$(auction).find('div.display_remaining_time').hide()
 				custom_clearInterval(id);
 			}
@@ -51,3 +119,36 @@ for (i=0; i<auctions.length; i++){
 	}
 	interval_id[int_id] = timer(remaining_seconds, remaining_minutes, remaining_hours, auction);
 }
+
+
+$('div.auctions').on('click', 'button', function (){
+	var id = this.id.split('-')[0]
+	$('#'+id+'-bid-modal').modal('show');
+});
+
+
+$('.bid-input-form').submit( function (event){
+	event.preventDefault();
+	modal_id = $(this).parents('.modal')[0].id
+	custom_clearInterval(modal_id)
+	interval_id[modal_id] = bid_timer(1, 0, modal_id);
+	input_id = $(this).parent().find('input')[0].id
+	latest_bid = $(this).parents('.modal').find('#latest-bid')
+	latest_bid.empty().append($('#'+input_id).val())
+	$('#'+input_id).val(null);
+});
+
+
+$('.modal').on('shown.bs.modal', function (){
+	_id = this.id
+	if (!(_id in interval_id)){
+		remaining_time = $(this).find('#bid-counter').text();
+		rt = remaining_time.split(':')
+		rm = parseInt(rt[0])
+		rs = parseInt(rt[1])
+
+		if ((rm != 0 && rs != 0) || rm != rs){
+			interval_id[_id] = bid_timer(rm, rs, _id)
+		}
+	}
+});
