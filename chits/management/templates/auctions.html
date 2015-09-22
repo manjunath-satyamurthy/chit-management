@@ -20,6 +20,31 @@ Auctions
 <div class="row">
 	<div class="col-md-9">
 		<div class="row">
+			 {% load template_tags %}
+
+				{% for auction in auctions.multiple_auction %}
+				<div id="{{ auction.id }}" class="auctions">
+					<input type="hidden" class="auction_time" value="{{ auction.start_time|date:'H:i' }}">
+				  <div class="col-md-3">
+				    <div class="box box-danger box-solid">
+				      <div class="box-header with-border">
+				        <h3 class="box-title">{{ auction.name }}</h3>
+			        <div class="display_remaining_time box-tools pull-right">
+			        </div>
+				      </div>
+				      <div class="box-body">
+				      	Max Shortage: {{ auction|get_max_shortage }}<br/>
+				      	Balance: {{ auction.balance }}<br/>
+				        Principal: {{ auction.principal }}				        
+				        <button id="{{ auction.id }}-bid-btn" class="btn btn-danger btn-xs pull-right">Bid Now</button>
+				        <button id="{{ auction.id }}-cancel-btn" class="btn btn-success btn-xs pull-right">Cancel</button>
+				      </div>
+				    </div>
+				  </div>
+			  </div>
+			 	{% endfor %}
+
+
 				{% for auction in auctions.today %}
 				<div id="{{ auction.id }}" class="auctions">
 					<input type="hidden" class="auction_time" value="{{ auction.start_time|date:'H:i' }}">
@@ -70,9 +95,9 @@ Auctions
 				        <h3 class="box-title">{{ auction.name }}</h3>
 				      </div>
 				      <div class="box-body">
-				        Startdate: {{ auction.start_date }}<br/>
-				        Principal: {{ auction.principal }}<br/>
-				        Months left: {{ auction.dues }}
+				        Balance: {{ auction.balance }}<br/>
+				        Bidder : {{ auction|get_bidder }}<br/>
+				        Bidder price: {{ auction|get_bidderprice }}
 				      </div>
 				    </div>
 				  </div>
@@ -93,7 +118,7 @@ Auctions
   </div>
 </div>
 
- {% load template_tags %}
+
 
 {% for auction in auctions.today %}
 	<div>
@@ -114,7 +139,7 @@ Auctions
 	        			</div>
 	        		</div>
 	        		<div class="col-md-4">
-	        			<p id="bid-counter" class="row counter">01:00</p>
+	        			<p id="bid-counter" class="row counter">00:05</p>
 	        			<div class="row" style="text-align: center;">
 	        				<p>Time Left</p>
 	        			</div>
@@ -143,7 +168,7 @@ Auctions
 								    <select id="{{ auction.id }}-bidder" class="select2 form-control">
 								      <option value="https://cdn2.iconfinder.com/data/icons/the-politics/350/Vote-512.png" selected="selected">None</option>
 								      {% for member in auction.members.all %}
-								      <option value="{{ member.photo.url }}">{{ member.username }}</option>
+									      <option value="{{ member.photo.url }}" data-id="{{ member.mid }}">{{ member.username }}</option>
 								      {% endfor %}
 								    </select>
 								  </div>
@@ -153,7 +178,75 @@ Auctions
 
 	        </div>
 	        <div class="modal-footer">
-	          <button type="button" class="btn btn-success disabled">Bid Complete</button>
+	          <button id="{{ auction.id }}-bid-complete-btn" data-loading-text="Loading..." type="button" class="btn btn-success" disabled>Bid Complete</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+{% endfor %}
+
+
+{% for auction in auctions.multiple_auction %}
+	<div>
+	  <div id="{{ auction.id }}-bid-modal" class="modal">
+	    <div class="modal-dialog modal-md">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h3 class="modal-title" style="text-align:center;">
+		          <b>Chit - {{ auction.name }}</b><br/>
+		          <small>multiple auction</small>
+		         </h3>
+	        </div>
+	        <div class="modal-body">
+	        	<div class="row">
+	        		<div class="col-md-4">
+	        			<p class="row counter">{{ auction|get_min_bid_for_multiple_auction }}</p>
+	        			<div class="row" style="text-align: center;">
+	        				<p>Starting Bid Price</p>
+	        			</div>
+	        		</div>
+	        		<div class="col-md-4">
+	        			<p id="bid-counter" class="row counter">00:05</p>
+	        			<div class="row" style="text-align: center;">
+	        				<p>Time Left</p>
+	        			</div>
+								<div class="input-group">
+									<form class="bid-input-form">
+							    <input id="{{ auction.id }}-bid-input" type="text" class="form-control bid-input" placeholder="Enter Bid">
+							    <span class="input-group-btn">
+							      <button class="btn btn-default bid-input-btn" type="submit">Bid</button>
+							    </span>
+							   </form>
+							  </div>
+	        		</div>
+	        		<div class="col-md-4">
+	        			<p id="latest-bid" class="row counter">{{ auction|get_min_bid_for_multiple_auction }}</p>
+								<div class="row" style="text-align: center;">
+		        			<p>Latest Bid</p>
+		        		</div>
+	        		</div>
+	        	</div>
+						<div class="bidder-container" style="display: none;">
+							<div class="row">
+								<div class="col-md-3"></div>
+								<div class="col-md-6">
+								  <div class="form-group">
+								  	<p style="text-align: center;"><b>Select Bidder</b></p>
+								    <select id="{{ auction.id }}-bidder" class="select2 form-control">
+								      <option value="https://cdn2.iconfinder.com/data/icons/the-politics/350/Vote-512.png" selected="selected">None</option>
+								      {% for member in auction.members.all %}
+									      <option value="{{ member.photo.url }}" data-id="{{ member.mid }}">{{ member.username }}</option>
+								      {% endfor %}
+								    </select>
+								  </div>
+								</div>
+							</div>
+						</div>
+
+	        </div>
+	        <div class="modal-footer">
+	          <button id="{{ auction.id }}-bid-complete-btn" data-loading-text="Loading..." type="button" class="btn btn-success" disabled>Bid Complete</button>
 	        </div>
 	      </div>
 	    </div>

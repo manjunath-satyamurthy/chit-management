@@ -1,4 +1,4 @@
-import json, datetime
+import json, datetime, time
 
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
@@ -16,7 +16,7 @@ from management.dbapi import get_members_by_user, create_member, \
     is_chit_name_existing, get_live_chit_batches, \
     get_payment_records_by_chitbatch_id_date, get_chitbatch_by_id, \
     get_chitbatch_distinct_bit_dates, update_payment, \
-    get_this_month_all_auctions
+    get_recent_auctions, update_bid_record, update_chit_batch
 
 from management.view_utils \
     import group_auctions_by_current_complete_remaining
@@ -137,7 +137,6 @@ def view_payments(request):
                     ),
                     'auction_date': str(bd),
                 })
-            print bd
 
         return HttpResponse(payment_record_template.render(c))
 
@@ -154,7 +153,7 @@ def view_payments(request):
 def auction(request):
     if request.method == 'GET':
         auction_template = loader.get_template('auctions.html')
-        months_auctions = get_this_month_all_auctions()
+        months_auctions = get_recent_auctions()
 
         auctions = group_auctions_by_current_complete_remaining(
             months_auctions)
@@ -166,6 +165,16 @@ def auction(request):
         else:
             c = RequestContext(request,{})
         return HttpResponse(auction_template.render(c))
+
+    if request.method == 'POST':
+        data = json.loads(request.POST['data'])
+        chit = get_chitbatch_by_id(data['chit_id'])
+        update_chit_batch(chit, data['bid_amt'])
+        update_bid_record(chit, data['mid'], data['bid_amt'])
+        return JsonResponse({
+            'status': 'success'
+            })
+
 
 
 

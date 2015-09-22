@@ -1,4 +1,5 @@
 import time, datetime
+from dateutil.relativedelta import *
 from management.models import Member, ChitBatch, PaymentRecord, \
     BidRecord
 
@@ -34,10 +35,7 @@ def get_chitbatch_distinct_bit_dates(chits):
     for chit in chits:
         distinct_bids = chit.payments.all().values('bid_date').distinct()
         bid_dates = [bd['bid_date'].strftime('%Y-%m-%d') for bd in distinct_bids]
-        print bid_dates
         chit_bid_dates[chit.id] = bid_dates
-    print chit_bid_dates
-
 
     return chit_bid_dates
 
@@ -108,17 +106,16 @@ def update_payment(ids):
         pr.save()
     
 
-def get_this_month_all_auctions():
+def get_recent_auctions():
     """
-    To return ChitBatch if there exists an auction this month
+    To return ChitBatches which are +/- one current month
     """
-    today = map(int, time.strftime("%Y-%m-%d").split('-'))
-
-    print ChitBatch.objects.filter(
-        next_auction__month=today[1], next_auction__year=today[0]).all()
-
+    today = datetime.date.today()
+    next_month = today+relativedelta(months=+1)
+    last_month = today-relativedelta(months=+1)
     return ChitBatch.objects.filter(
-        next_auction__month=today[1], next_auction__year=today[0]).all()
+        next_auction__lte=next_month, next_auction__gte=last_month).all()
+
 
 
 def get_bid_record_by_id_and_bid_date(chit_id, bid_date):
@@ -129,3 +126,76 @@ def get_bid_record_by_id_and_bid_date(chit_id, bid_date):
         chitbatch=chit_id,
         bid_date=bid_date
     )
+
+
+def get_latest_bid(chit):
+    """
+    To return the latest BidRecord
+    """
+    try:
+        return chit.records.latest()
+    except:
+        return None
+
+
+def get_first_bid_from_bidrecord(chit):
+    print BidRecord.objects.filter(
+        chitbatch=chit.id,
+        bid_date=chit.start_date
+    )
+    
+    return BidRecord.objects.filter(
+        chitbatch=chit.id,
+        bid_date=chit.start_date
+    )
+
+
+def restore_auction_to_nextmonth(chit):
+    chit.next_auction += relativedelta(months=+1)
+    chit.is_multiple_auction = False
+    chit.save()
+
+
+def update_chit_batch(chit, bid_amt, cancel_auction=False):
+    """
+    To update ChitBatch after every auction
+    """
+
+    if chit.is_another_auction_possible and not cancel_auction:
+        chit.is_multiple_auction = True
+    else:
+        next_auction = chit.next_auction+relativedelta(months=+1)
+        chit.is_multiple_auction = False
+        chit.next_auction = next_auction
+
+    chit.dues = chit.dues - 1
+    chit.update_balance(bid_amt)
+    
+    chit.save()
+    chit.update_payment_record()
+
+
+def update_bid_record(chit, member_id, bid_amt):
+    """
+    To update BidRecord after every auction
+    """
+
+    last_bid = get_latest_bid(chit)
+
+    if chit.is_multiple_auction and last_bid:
+        bid_count = last_bid.bid_count+1
+    else:
+        bid_count = 1
+    balance = bid_amt - chit.get_commission()
+    member = get_members_by_ids([member_id])[0]
+    bid_record = BidRecord(chitbatch=chit, bidder=member,
+        bid_date=chit.next_auction, bid_amount=bid_amt,
+        balance=balance, bid_count=bid_count
+    )
+    bid_record.save()
+
+
+    for payment in chit.payments.all():
+        bid_record.payment_record.add(payment)
+
+    return bid_record

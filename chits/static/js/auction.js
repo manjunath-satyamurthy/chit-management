@@ -25,12 +25,38 @@ formatState = function (state) {
   return $state;
 };
 
+post_auction_info = function (bid_btn, bid_amt, member_id, chit_id) {
+	$(bid_btn).on('click', function () {
+		$(this).prop('disabled', true);
+		fdata = JSON.stringify({'bid_amt': bid_amt, 'mid': member_id, 'chit_id': chit_id})
+	  	$.ajax({
+		    url: '/record/auctions/',
+		    method: 'post',
+		    data: {'data': fdata},
+		    complete: function(result, status) {
+		    	response = JSON.parse(result.responseText)
+		      if (response['status'] == 'success'){
+		      	window.location.reload();
+		      }
+		      else {
+		      	alert(result.responseText);
+		      }
+		    }
+		 });
+	});
+}
+
 show_members_util = function (m_id){
 	id = m_id.split('-')[0]
 	$('#'+id+'-bidder').parents('.bidder-container').show();
 	
 	$('#'+id+'-bidder').select2({templateResult: formatState}).on("change", function(e) {
-		console.log('bullbull')
+		member_id = $($('#'+id+'-bidder').select2('data')[0].element).attr('data-id')
+		bid_btn = $('#'+id+'-bid-complete-btn') 
+		bid_btn.removeAttr('disabled');
+		bid_amt = $('#'+m_id).find('#latest-bid').text()
+		post_auction_info(bid_btn, parseInt(bid_amt), parseInt(member_id), parseInt(m_id))
+
 	});
 }
 
@@ -40,7 +66,6 @@ show_members_to_select = function (m_id){
 	}
 	else {
 		$('#'+m_id).on('shown.bs.modal', function (){
-			console.log('hell')
 			show_members_util(m_id)
 	    });
 	}
@@ -52,7 +77,6 @@ bid_timer = function (rm, rs, modal_id){
 		
 		if (rm ==0 && rs ==0){
 			$('#'+modal_id).find('.bid-input-form').remove();
-			console.log(modal_id)
 			show_members_to_select(modal_id)
 			custom_clearInterval(modal_id)
 		}
@@ -65,7 +89,6 @@ bid_timer = function (rm, rs, modal_id){
 		else if (rs > 0){
 			rs = rs -1
 		}
-
 
 		if (String(rm).length < 2){
 			rm = '0'+String(rm)
@@ -122,6 +145,7 @@ for (i=0; i<auctions.length; i++){
 
 
 $('div.auctions').on('click', 'button', function (){
+	console.log('bul')
 	var id = this.id.split('-')[0]
 	$('#'+id+'-bid-modal').modal('show');
 });
