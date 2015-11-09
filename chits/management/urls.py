@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
 from management.views import dashboard, view_members, \
     create_new_member, view_chits, create_chit, view_payments, \
-    auction
+    auction, delete_user, download_url_for_local, \
+    download_url_for_AWS_S3
 
 urlpatterns = patterns(
     "",
@@ -12,4 +13,7 @@ urlpatterns = patterns(
     url(r'^chits/create/$', create_chit, name='create_chit'),
     url(r'^record/payments/$', view_payments, name='view_payments'),
     url(r'^record/auctions/$', auction, name='auction'),
+    url(r'^delete/user/$', delete_user, name='delete_user'),
+    # url(r'^report/url/$', download_url_for_local, name='download_url_for_local'),
+    url(r'^report/url/$', download_url_for_AWS_S3, name='download_url_for_AWS_S3'),
     )

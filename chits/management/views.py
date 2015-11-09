@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login as dj_login, \
     logout as dj_logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from base.models import ChitUser
 from management.models import Member
@@ -21,6 +22,8 @@ from management.dbapi import get_members_by_user, create_member, \
 from management.view_utils \
     import group_auctions_by_current_complete_remaining
 
+
+from chits.settings import bucket
 
 @login_required
 def dashboard(request):
@@ -175,6 +178,39 @@ def auction(request):
             'status': 'success'
             })
 
+@csrf_exempt
+#@staff_member_required
+def delete_user(request):
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        user = ChitUser.objects.get(id=user_id)
+        user.delete()
+        print 'done'
+        return JsonResponse({
+            'status': 'success'
+            })
+
+@csrf_exempt
+@login_required
+def download_url_for_local(request):
+    if request.method == 'POST':
+        chit_id = request.POST['chit_id']
+        print chit_id
+        return JsonResponse({
+            'status': 'success',
+            'url': 'http://127.0.0.1:8888/static/media/report/'+str(chit_id)+'.pdf'
+            })
 
 
-
+@csrf_exempt
+@login_required
+def download_url_for_AWS_S3(request):
+    if request.method == 'POST':
+        chit_id = request.POST['chit_id']
+        report_key = bucket.get_key(str(chit_id)+'.pdf')
+        report_url = report_key.generate_url(3600, query_auth=True, force_http=True)
+        print report_url
+        return JsonResponse({
+            'status': 'success',
+            'url': report_url,
+            })

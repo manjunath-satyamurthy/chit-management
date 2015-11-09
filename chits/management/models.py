@@ -81,6 +81,7 @@ class ChitBatch(Model):
     def get_last_auction_date(self):
         if self.next_auction != self.start_date:
             return self.next_auction-relativedelta(months=+1)
+        return self.start_date
 
     def get_max_shortage(self, bid_amount):
         possible_balance = self.balance + bid_amount - self.get_commission()

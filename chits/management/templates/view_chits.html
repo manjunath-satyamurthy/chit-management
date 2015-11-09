@@ -27,6 +27,7 @@ View Chit Batches
                 <th>start date</th>
                 <th>dues</th>
                 <th>state</th>
+                <th>report</th>
             </tr>
           </thead>
           <tbody>
@@ -38,6 +39,7 @@ View Chit Batches
                   <td>{{ chit.start_date }}</td>
                   <td>{{ chit.dues }}</td>
                   <td>{{ chit.state }}</td>
+                  <td><button id="{{ chit.id }}-report" type="button" class="report btn btn-primary">download</button></td>
               </tr>
             {% endfor %}
           </tbody>
@@ -59,5 +61,19 @@ View Chit Batches
       ],
     });
   } );
+
+  $('button.report').on('click', function (e){
+    x = parseInt(e.currentTarget.id.split('-')[0])
+    $.ajax({
+      url: '/report/url/',
+      method: 'post',
+      data: {'chit_id': x},
+      complete: function(result, status) {
+        console.log(result.responseText)
+        window.open(JSON.parse(result.responseText).url)
+      }
+    });
+  });
+
 </script>
 {% endblock %}

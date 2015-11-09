@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = "@&$$$#f)l(%^-d+nym0fneofmxhk6_6u%xw96ma#+$tp9lo+9e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://127.0.0.1']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'chits',
     'base',
     'management',
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,3 +107,15 @@ except ImportError:
 AUTH_USER_MODEL = 'base.ChitUser'
 
 MEDIA_URL = 'http://127.0.0.1:8000/static/media/member_photos/'
+
+AWS_STORAGE_BUCKET_NAME = 'reports-pdfs'
+AWS_ACCESS_KEY_ID = 'AKIAJXQU7GUI4LQIUKIA'
+AWS_SECRET_ACCESS_KEY = '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'
+
+from boto.s3.connection import S3Connection
+
+conn = S3Connection(
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY
+)
+bucket = conn.create_bucket(AWS_STORAGE_BUCKET_NAME)
