@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = "@&$$$#f)l(%^-d+nym0fneofmxhk6_6u%xw96ma#+$tp9lo+9e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['http://127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
