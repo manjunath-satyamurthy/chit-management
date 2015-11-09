@@ -1,0 +1,23 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<body>
+<h1>Chit Record of chit {{ chit.name }}</h1>
+<table class="table table-striped">
+<tr>
+	<th>startdate</th>
+	<th>principal</th>
+	<th>emi</th>
+	<th>balance</th>
+</tr>
+<tr>
+	<td>{{ chit.start_date }}</td>
+	<td>{{ chit.principal }}</td>
+	<td>{{ chit.emi }}</td>
+	<td>{{ chit.balance }}</td>
+</tr>
+</table>
+</body>
+</html>
