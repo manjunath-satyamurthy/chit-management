@@ -41,7 +41,7 @@ post_to_create_chit = function () {
     'm': parseInt(time[1]),
   }
 
-  data = JSON.stringify({
+  fdata = JSON.stringify({
       name:$('input[name=name]').val(),
       principal: parseInt($('input[name=principal]').val()),
       period: parseInt($('input[name=period]').val()),
@@ -50,17 +50,16 @@ post_to_create_chit = function () {
       chit_members_id: chit_members_id
   });
 
-  console.log(data)
-
   $.ajax({
     url: '/chits/create/',
     method: 'post',
-    data: {'data': data},
+    data: {'data': fdata},
     complete: function(result, status) {
       response = JSON.parse(result.responseText)
       if (response['status'] != "success"){
-        alert(result.responseText['message']);
+        alert(response['message']);
       }
+      alert(response['status']);
       window.location.reload();
     }
   });

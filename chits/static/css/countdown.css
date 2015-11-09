@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'led';
+    src: url('/static/fonts/digital-7.ttf');
+}
+
+.counter {
+	font-family: led;
+	font-size: 50px;
+	font-style: normal;
+	font-variant: normal;
+	color: #FF0000;
+	font-weight: 500;
+	text-align: center;
+}
+
+.bid-amount {
+	font-size: 50px;
+	font-style: normal;
+	font-variant: normal;
+	color: #FF0000;
+	font-weight: 500;
+	text-align: center;
+}
