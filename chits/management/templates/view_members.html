@@ -31,7 +31,12 @@ View Members
             {% for member in members %}
               <tr>
                   <td>{{ member.mid }}</td>
-                  <td><img src="{{ member.photo.url }}" height="30" width="32"></td>
+                  {% if member.photo %}
+                  <td><img src="{{ member.photo.url }}" width="32"></td>
+                  {% else %}
+                  {% load static %}
+                  <td><img src='{% static "images/member_photos/unknown.png" %}' width="32"></td>
+                  {% endif %}
                   <td>{{ member.firstname }}</td>
                   <td>{{ member.lastname }}</td>
                   <td>{{ member.address }}</td>

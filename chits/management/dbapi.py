@@ -76,6 +76,7 @@ def create_member(user, firstname, lastname, address, phone_number,
     member = Member(user=user, firstname=firstname, lastname=lastname,
             username=username, address=address,phone_number=phone_number,
             photo=photo)
+    print member.photo, 'member'
     member.save()
     return member
 

@@ -124,7 +124,12 @@ Create Chit Batches
                   {% for member in members %}
                       <tr>
                           <td><input class="members" id="{{ member.mid }}" type="checkbox"></td>
+                          {% if member.photo %}
                           <td id="img_{{ member.mid }}"><img src="{{ member.photo.url }}" height="30" width="32"></td>
+                          {% else %}
+                          {% load static %}
+                          <td id="img_{{ member.mid }}"><img src="{% static 'images/member_photos/unknown.png' %}" height="30" width="32"></td>
+                          {% endif %}
                           <td>{{ member.username }}</td>
                           <td>{{ member.phone_number }}</td>
                       </tr>

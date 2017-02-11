@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login as dj_login, \
     logout as dj_logout
 from django.views.decorators.csrf import csrf_exempt
 
+from base.models import ChitUser
+
 @csrf_exempt
 def login(request):
     if request.method == "GET":
@@ -15,9 +17,12 @@ def login(request):
         data = request.POST
         username, password = data['username'], data['password']
 
+        # user = ChitUser.objects.get(username=username, password=password)
         user = authenticate(username=username, password=password)
+
         if user:
             dj_login(request, user)
             c = RequestContext(request)
             return redirect('dashboard')
         return JsonResponse({'message': 'Invalid Credentials'}, status=401)
+
