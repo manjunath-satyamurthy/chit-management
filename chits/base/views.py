@@ -16,13 +16,11 @@ def login(request):
     if request.method == "POST":
         data = request.POST
         username, password = data['username'], data['password']
-
-        # user = ChitUser.objects.get(username=username, password=password)
         user = authenticate(username=username, password=password)
 
         if user:
             dj_login(request, user)
             c = RequestContext(request)
-            return redirect('dashboard')
+            return redirect('calendar')
         return JsonResponse({'message': 'Invalid Credentials'}, status=401)
 

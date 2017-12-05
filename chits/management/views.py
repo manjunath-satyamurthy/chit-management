@@ -23,9 +23,20 @@ from management.view_utils \
 
 
 @login_required
-def dashboard(request):
+def calendar(request):
     if request.method == 'GET':
-        return render(request, 'dashboard.html')
+        return render(request, 'calendar.html')
+
+@csrf_exempt
+def test(request):
+    if request.method == 'POST':
+        data = json.loads(request.POST['data'])
+
+        return JsonResponse({
+                'greetings': 'Hi jaanu',
+                'message': 'I love you',
+                'client message': data['message']
+                })
 
 
 @login_required
